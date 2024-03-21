@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "scheme": "acme",
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "name": "SmartMobility",
+    "slug": "SmartMobility",
+    "android": {
+      "package": "com.company",
+      "config": {
+          "googleMaps": {
+              "apiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
+          }
+      }
+  },
+  "ios": {
+      "bundleIdentifier": "com.company",
+      "config": {
+          "googleMapsApiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
+      }
+  }
+  }
+}
