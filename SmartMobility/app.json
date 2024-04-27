@@ -5,23 +5,24 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ],
     "name": "SmartMobility",
     "slug": "SmartMobility",
     "android": {
       "package": "com.company",
       "config": {
-          "googleMaps": {
-              "apiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
-          }
+        "googleMaps": {
+          "apiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
+        }
       }
-  },
-  "ios": {
+    },
+    "ios": {
       "bundleIdentifier": "com.company",
       "config": {
-          "googleMapsApiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
+        "googleMapsApiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
       }
-  }
+    }
   }
 }
