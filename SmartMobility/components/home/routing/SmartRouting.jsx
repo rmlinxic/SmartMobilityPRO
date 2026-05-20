@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, Switch } from 'react-native';
-import MapView, { Marker, Polyline, Heatmap, PROVIDER_GOOGLE } from 'react-native-maps';
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, Switch, Platform } from 'react-native';
+import MapView, { Marker, Polyline, Heatmap, Circle, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 
 import { supabase } from '../../../services/supabase';
 import styles from './SmartRouting.style';
 import { COLORS } from '../../../constants';
+
+// On iOS, use Apple Maps by default (no extra setup needed).
+// PROVIDER_GOOGLE requires a valid API key AND CocoaPods google-maps-ios setup.
+// Heatmap component only works with PROVIDER_GOOGLE, so we use Circle fallback on iOS/Apple Maps.
+const MAP_PROVIDER = Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined;
 
 // Seed mock historical data for Joi/SC region (fallback if Supabase is empty)
 const SEED_HEATMAP_POINTS = [
@@ -212,13 +217,13 @@ export default function SmartRouting() {
 
       {/* Map View */}
       <MapView
-        provider={PROVIDER_GOOGLE}
+        provider={MAP_PROVIDER}
         style={styles.map}
         initialRegion={currentRegion}
         showsUserLocation
       >
-        {/* Heatmap Layer */}
-        {heatmapPoints.length > 0 && (
+        {/* Heatmap Layer — Google Maps only (Android). On iOS/Apple Maps, use Circle overlays as fallback. */}
+        {heatmapPoints.length > 0 && Platform.OS === 'android' && (
           <Heatmap
             points={heatmapPoints}
             radius={40}
@@ -230,6 +235,25 @@ export default function SmartRouting() {
             }}
           />
         )}
+        {heatmapPoints.length > 0 && Platform.OS === 'ios' &&
+          heatmapPoints.map((pt, idx) => {
+            // Map weight (1-100) to color: low=blue, mid=green, high=red
+            const r = Math.min(255, Math.round((pt.weight / 100) * 255));
+            const g = pt.weight < 50 ? Math.round((pt.weight / 50) * 255) : Math.round(((100 - pt.weight) / 50) * 255);
+            const b = Math.max(0, Math.round(((100 - pt.weight) / 100) * 255));
+            const color = `rgba(${r}, ${g}, ${b}, 0.35)`;
+            return (
+              <Circle
+                key={`circle-${idx}`}
+                center={{ latitude: pt.latitude, longitude: pt.longitude }}
+                radius={80}
+                fillColor={color}
+                strokeColor={`rgba(${r}, ${g}, ${b}, 0.6)`}
+                strokeWidth={1}
+              />
+            );
+          })
+        }
 
         {/* Recommended Path Markers */}
         {showRoutes && routes.length > 0 && (

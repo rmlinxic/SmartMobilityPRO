@@ -36,8 +36,7 @@
     "react-native-web": "~0.19.6",
     "@supabase/supabase-js": "^2.39.8",
     "expo-av": "~13.10.5",
-    "react-native-ble-plx": "^3.1.2",
-    "@config-plugins/react-native-ble-plx": "^7.0.0"
+    "react-native-ble-plx": "^3.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",

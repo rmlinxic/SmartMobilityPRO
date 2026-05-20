@@ -90,10 +90,46 @@ export const BleProvider = ({ children }) => {
     return false;
   };
 
+  // Wait for Bluetooth adapter to be powered on (required for iOS CBManager)
+  const waitForBluetoothReady = () => {
+    return new Promise((resolve, reject) => {
+      const subscription = manager.onStateChange((state) => {
+        if (state === 'PoweredOn') {
+          subscription.remove();
+          resolve(true);
+        } else if (state === 'PoweredOff') {
+          subscription.remove();
+          reject(new Error('Bluetooth está desligado. Por favor, ative o Bluetooth nas Configurações.'));
+        } else if (state === 'Unauthorized') {
+          subscription.remove();
+          reject(new Error('Acesso ao Bluetooth não autorizado. Verifique as permissões do app nas Configurações.'));
+        } else if (state === 'Unsupported') {
+          subscription.remove();
+          reject(new Error('Este dispositivo não suporta Bluetooth Low Energy.'));
+        }
+        // 'Resetting' and 'Unknown' states: keep waiting
+      }, true); // true = emit current state immediately
+
+      // Timeout after 10s waiting for Bluetooth to be ready
+      setTimeout(() => {
+        subscription.remove();
+        reject(new Error('Tempo esgotado aguardando o Bluetooth ficar pronto.'));
+      }, 10000);
+    });
+  };
+
   const startScan = async () => {
     const hasPermission = await requestPermissions();
     if (!hasPermission) {
       setBleError('Permissões de Bluetooth negadas.');
+      return;
+    }
+
+    // On iOS, we must ensure CBManager is in PoweredOn state before scanning
+    try {
+      await waitForBluetoothReady();
+    } catch (err) {
+      setBleError(err.message);
       return;
     }
 

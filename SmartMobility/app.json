@@ -8,11 +8,11 @@
       "expo-router",
       "expo-font",
       [
-        "@config-plugins/react-native-ble-plx",
+        "react-native-ble-plx",
         {
           "isBackgroundEnabled": true,
           "modes": ["peripheral", "central"],
-          "bluetoothNeverForLocationPermissionDescription": "Permitir conexão Bluetooth para o sensor de mobilidade B1K3L4B."
+          "bluetoothAlwaysPermissionMessage": "Permitir conexão Bluetooth para o sensor de mobilidade B1K3L4B."
         }
       ]
     ],
@@ -31,20 +31,23 @@
       ],
       "config": {
         "googleMaps": {
-          "apiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
+          "apiKey": "AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4"
         }
       }
     },
     "ios": {
-      "bundleIdentifier": "com.company",
+      "supportsTablet": true,
+      "bundleIdentifier": "com.company.smartmobility",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Precisamos da sua localização para rastrear a rota e atrelar os dados de sensores.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Precisamos da sua localização em segundo plano para continuar rastreando a rota durante o percurso.",
         "NSMicrophoneUsageDescription": "Precisamos de acesso ao microfone para estimar o ruído e poluição sonora em tempo real.",
         "NSBluetoothAlwaysUsageDescription": "Precisamos de acesso ao Bluetooth para conectar ao sensor IoT B1K3L4B.",
-        "NSBluetoothPeripheralUsageDescription": "Precisamos de acesso ao Bluetooth para conectar ao sensor IoT B1K3L4B."
+        "NSBluetoothPeripheralUsageDescription": "Precisamos de acesso ao Bluetooth para conectar ao sensor IoT B1K3L4B.",
+        "UIBackgroundModes": ["bluetooth-central", "bluetooth-peripheral", "location"]
       },
       "config": {
-        "googleMapsApiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
+        "googleMapsApiKey": "AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4"
       }
     }
   }
