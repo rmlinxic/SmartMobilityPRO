@@ -1,25 +1,22 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
   FlatList,
+  Pressable,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useNavigation } from '@react-navigation/native';
 import BikeComponent from './BikeComponent';
-import CarComponent from './CarComponent';
-import WalkingComponent from './WalkingComponent';
 import styles from "./welcome.style";
-import { icons, SIZES } from "../../../constants";
+import { SIZES, COLORS, FONT } from "../../../constants";
 import GoogleMapsAPI from './GoogleMapsAPI';
-import React from "react";
 
+const mobilityTypes = ["de Bike"];
 
-const jobTypes = ["de Carro", "Andando", "de Bike"];
-
-const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
-  const router = useRouter();
-  const [activeJobType, setActiveJobType] = useState("de Bike");
+const Welcome = () => {
+  const navigation = useNavigation();
+  const [activeMobilityType, setActiveMobilityType] = useState("de Bike");
 
   return (
     <View>
@@ -30,15 +27,15 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
 
       <View style={styles.tabsContainer}>
         <FlatList
-          data={jobTypes}
+          data={mobilityTypes}
           renderItem={({ item }) => (
             <TouchableOpacity
-              style={styles.tab(activeJobType, item)}
+              style={styles.tab(activeMobilityType, item)}
               onPress={() => {
-                setActiveJobType(item);
+                setActiveMobilityType(item);
               }}
             >
-              <Text style={styles.tabText(activeJobType, item)}>{item}</Text>
+              <Text style={styles.tabText(activeMobilityType, item)}>{item}</Text>
             </TouchableOpacity>
           )}
           keyExtractor={(item) => item}
@@ -46,14 +43,34 @@ const Welcome = ({ searchTerm, setSearchTerm, handleClick }) => {
           horizontal
         />
       </View>
-     <GoogleMapsAPI/>
+      
+      <GoogleMapsAPI />
+      
       <View>
-  {activeJobType === "de Carro" && <CarComponent />}
-  {activeJobType === "Andando" && <WalkingComponent />}
-  {activeJobType === "de Bike" && <BikeComponent />}
-</View>
+        {activeMobilityType === "de Bike" && <BikeComponent />}
+      </View>
 
-
+      {/* Botão de acesso ao Mapa Inteligente / Roteamento Seguro */}
+      <Pressable
+        style={{
+          backgroundColor: COLORS.tertiary,
+          paddingVertical: 14,
+          borderRadius: SIZES.medium,
+          alignItems: 'center',
+          marginHorizontal: SIZES.medium,
+          marginTop: SIZES.medium,
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.2,
+          shadowRadius: 3,
+          elevation: 4,
+        }}
+        onPress={() => navigation.navigate('SmartRoutingScreen')}
+      >
+        <Text style={{ color: '#fff', fontFamily: FONT.bold, fontSize: SIZES.medium }}>
+          🗺️ Mapa Inteligente & Rota Segura
+        </Text>
+      </Pressable>
     </View>
   );
 };

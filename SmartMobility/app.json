@@ -6,12 +6,29 @@
     },
     "plugins": [
       "expo-router",
-      "expo-font"
+      "expo-font",
+      [
+        "@config-plugins/react-native-ble-plx",
+        {
+          "isBackgroundEnabled": true,
+          "modes": ["peripheral", "central"],
+          "bluetoothNeverForLocationPermissionDescription": "Permitir conexão Bluetooth para o sensor de mobilidade B1K3L4B."
+        }
+      ]
     ],
     "name": "SmartMobility",
     "slug": "SmartMobility",
     "android": {
       "package": "com.company",
+      "permissions": [
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_FINE_LOCATION",
+        "RECORD_AUDIO",
+        "BLUETOOTH",
+        "BLUETOOTH_ADMIN",
+        "BLUETOOTH_SCAN",
+        "BLUETOOTH_CONNECT"
+      ],
       "config": {
         "googleMaps": {
           "apiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
@@ -20,6 +37,12 @@
     },
     "ios": {
       "bundleIdentifier": "com.company",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Precisamos da sua localização para rastrear a rota e atrelar os dados de sensores.",
+        "NSMicrophoneUsageDescription": "Precisamos de acesso ao microfone para estimar o ruído e poluição sonora em tempo real.",
+        "NSBluetoothAlwaysUsageDescription": "Precisamos de acesso ao Bluetooth para conectar ao sensor IoT B1K3L4B.",
+        "NSBluetoothPeripheralUsageDescription": "Precisamos de acesso ao Bluetooth para conectar ao sensor IoT B1K3L4B."
+      },
       "config": {
         "googleMapsApiKey": "<AIzaSyA482hWtTfqddT_Zl56-zaLedJvOe1rhV4>"
       }

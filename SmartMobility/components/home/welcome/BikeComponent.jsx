@@ -9,7 +9,7 @@ export default function BikeComponent() {
   return (
     <Pressable
     style={styles.button} 
-      onPress={() => navigation.navigate('PopularJobsScreen')}
+      onPress={() => navigation.navigate('DeviceConnectionScreen')}
     >
       <Text style={styles.text}>Vamos Começar!</Text>
     </Pressable>
